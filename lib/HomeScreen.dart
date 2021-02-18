@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'ConvertCurrency.dart';
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -31,15 +33,17 @@ class _HomeScreenState extends State<HomeScreen> {
   String toCurrency = "Taka";
   String outputValue = "";
 
-  @override
+  ConvertCurrency convertCurrency= new ConvertCurrency();
+
+    @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(children: [
             Container(
-              height: 100,
-              width: 100,
+              height: 150,
+              width: 600,
               decoration: BoxDecoration(
                 border: Border.all(
                   color: Colors.blue,
@@ -48,27 +52,34 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Center(
                   child: Column(children: [
-                DropdownButton<String>(
-                  value: fromCurrency,
-                  onChanged: (String string) =>
-                      setState(() => fromCurrency = string),
-                  items: currency.map((String item) {
-                    return DropdownMenuItem<String>(
-                      child: Text('$item'),
-                      value: item,
-                    );
-                  }).toList(),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
+                  child: DropdownButton<String>(
+                    value: fromCurrency,
+                    onChanged: (String string) =>
+                        setState(() => fromCurrency = string),
+                    items: currency.map((String item) {
+                      return DropdownMenuItem<String>(
+                        child: Text('$item'),
+                        value: item,
+                      );
+                    }).toList(),
+                  ),
                 ),
-                TextField(
-                  decoration: InputDecoration(
-                      labelText: "Input your amount in $fromCurrency"),
-                  onChanged: (inputValue) {
-                    setState(() {
-                      inputValue = inputValue;
-                      print(inputValue);
-                    });
-                  },
-                ),
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
+                                  
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          labelText: "Input your amount in $fromCurrency"),
+                      onChanged: (inputValue) {
+                        setState(() {
+                          inputValue = inputValue;
+                          print(inputValue);
+                        });
+                      },
+                    )
+                    )
               ])),
             ),
 
@@ -99,16 +110,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Padding(
                     padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                          labelText: "Input your amount in $toCurrency"),
-                      onChanged: (inputValue) {
-                        setState(() {
-                          inputValue = inputValue;
-                          print(inputValue);
-                        });
-                      },
-                    ))
+                    child: Text('Your $toCurrency is: $outputValue')
+                    // TextFormField(
+                    //   decoration: InputDecoration(
+                    //       labelText: "Input your amount in $toCurrency"),
+                    //   onChanged: (inputValue) {
+                    //     setState(() {
+                    //       inputValue = inputValue;
+                    //       print(inputValue);
+                    //     });
+                    //   },
+                    // )
+                    )
               ])),
             ),
 
@@ -142,7 +155,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Scaffold.of(context).showSnackBar(SnackBar(
                       content: Text('Tap'),
                     ));
-                    print(toCurrency);
+                    
+                    outputValue = convertCurrency.Convert(fromCurrency,toCurrency,inputValue);
                   }),
 
             )
@@ -152,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void snak() {
     Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text('Tap'),
+      content: Text('Tap: '+outputValue),
     ));
   }
 }
